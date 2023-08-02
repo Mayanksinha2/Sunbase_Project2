@@ -1,135 +1,137 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const loginForm = document.getElementById("loginForm");
-  const crudSection = document.getElementById("crudSection");
-  const userDetails = document.getElementById("userDetails");
-  const createUserForm = document.getElementById("createUserForm");
+    const loginForm = document.getElementById("loginForm");
+    const crudSection = document.getElementById("crudSection");
+    const userDetails = document.getElementById("userDetails");
+    const createUserForm = document.getElementById("createUserForm");
+    const DeleteUser = document.getElementById("deleteUserForm");
+    const EditUser = document.getElementById("editUserForm");
 
-//   let bearerToken = null;
 
-  loginForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    const username = event.target.username.value;
-    const password = event.target.password.value;
-  
+    loginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const username = event.target.username.value;
+        const password = event.target.password.value;
 
-var myHeaders = new Headers();
-myHeaders.append("Content-Type", "text/plain",);
-myHeaders.append('Access-Control-Allow-Origin','*');
-myHeaders.append('Access-Control-Allow-Methods','POST');
-var raw = "{\r\n\"login_id\":\"test@sunbasedata.com\",\r\n\"password\" :\"Test@123\"\r\n}";
 
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  
-};
-/*
-var loginURL = http://qa2.sunbasedata.com/sunbase/portal/api/assignment_auth.jsp;
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "text/plain",);
+        myHeaders.append('Access-Control-Allow-Origin', '*');
+        myHeaders.append('Access-Control-Allow-Methods', 'POST');
+        var raw = "{\r\n\"login_id\":\"test@sunbasedata.com\",\r\n\"password\" :\"Test@123\"\r\n}";
 
-jQuery(document).on('click', '#CompleteReview', function() {
-    $.ajax({
-        url: loginURL,
-        type: 'POST',
-        data: { 'course_id': course_id, 'review_id': review_id},
-        success: function (response) {
-            //return false;
-            if (response.redirect_url == 'unauthorized' || typeof (response.redirect_url) == 'undefined') {
-                window.location.href = HTTP_SERVER + "unauthorized";
-                return false;
-            }
-            if (response.success == true) {
-                window.location.href = HTTP_SERVER + 'view-request-review/' + response.encripted_course_id + "/" + response.encripted_review_id + "/" + response.formname;
-            }
-        },
-        error: function error(err) {
-            console.log(err);
-        }
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+
+        };
+        fetch("https://qa2.sunbasedata.com/sunbase/portal/api/assignment_auth.jsp", requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                alert(result)
+                localStorage.setItem('token', JSON.stringify(result.access_token));
+
+            })
+            .catch(error => console.log('error', error));
     });
 
-});*/
+
+    createUserForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const Fnm = event.target.FirstName.value;
+        const Lnm = event.target.LastName.value;
+        const email = event.target.Email.value;
+        const phone = event.target.Phone.value;
+        const street = event.target.Street.value;
+        const cty = event.target.City.value;
+        const state = event.target.State.value;
+        const address = event.target.Address.value;
 
 
 
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer dGVzdEBzdW5iYXNlZGF0YS5jb206VGVzdEAxMjM=");
+        myHeaders.append("Content-Type", "text/plain");
 
-fetch("https://qa2.sunbasedata.com/sunbase/portal/api/assignment_auth.jsp", requestOptions)
-  .then((response) => response.text())
-  .then((result) => {alert(result)
-    localStorage.setItem('token', JSON.stringify(result.access_token));
-    
-})
-  .catch(error => console.log('error', error));
-  });
+        var raw = "{\r\n\"first_name\": \"Jane\",\r\n\"last_name\": \"Doe\",\r\n\"street\": \"Elvnu Street\",\r\n\"address\": \"H no 2 \",\r\n\"city\": \"Delhi\",\r\n\"state\": \"Delhi\",\r\n\"email\": \"sam@gmail.com\",\r\n\"phone\": \"12345678\"\r\n}";
 
-  createUserForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    const newUsername = event.target.newUsername.value;
-    const newEmail = event.target.newEmail.value;
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
 
-    // Simulate API call for creating a user
-    simulateCreateUser(newUsername, newEmail)
-      .then(() => {
-        // Simulate API call to fetch user details after creating
+        fetch("https://qa2.sunbasedata.com/sunbase/portal/api/assignment.jsp?cmd=update&uuid=test2d66b0a03a7c4cc6abc41c6c4d7ffdfe", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+
+
+    });
+
+    DeleteUser.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer dGVzdEBzdW5iYXNlZGF0YS5jb206VGVzdEAxMjM=");
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("https://qa2.sunbasedata.com/sunbase/portal/api/assignment.jsp?cmd=delete&uuid=test114c540210744fb7b1f47309214f7982", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+
+    });
+
+    EditUser.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer dGVzdEBzdW5iYXNlZGF0YS5jb206VGVzdEAxMjM=");
+        myHeaders.append("Content-Type", "text/plain");
+
+        var raw = "{\r\n\"first_name\": \"Jane\",\r\n\"last_name\": \"Doe\",\r\n\"street\": \"Elvnu Street\",\r\n\"address\": \"H no 2 \",\r\n\"city\": \"Delhi\",\r\n\"state\": \"Delhi\",\r\n\"email\": \"sam@gmail.com\",\r\n\"phone\": \"12345678\"\r\n}";
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch("https://qa2.sunbasedata.com/sunbase/portal/api/assignment.jsp?cmd=update&uuid=test2d66b0a03a7c4cc6abc41c6c4d7ffdfe", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+
+
+    });
+
+
+    function showCRUDSection() {
+        loginForm.style.display = "none";
+        crudSection.style.display = "block";
+
+        // Simulate API call to fetch user details after login
         simulateGetUserDetails()
-          .then((users) => {
-            displayUserDetails(users);
-          });
-      })
-      .catch((error) => {
-        alert("Failed to create user. Please try again.");
-      });
-  });
+            .then((users) => {
+                displayUserDetails(users);
+            });
+    }
 
-
-
-
-
-
-
-
-
-
-  function simulateCreateUser(username, email) {
-    return new Promise((resolve, reject) => {
-      // Simulate API call delay
-      setTimeout(() => {
-        resolve();
-      }, 500); // Simulate 0.5 seconds delay
-    });
-  }
-
-  function simulateGetUserDetails() {
-    return new Promise((resolve) => {
-      // Simulate API call delay
-      setTimeout(() => {
-        const users = [
-          { id: 1, username: "john_doe", email: "john.doe@example.com" },
-          { id: 2, username: "jane_doe", email: "jane.doe@example.com" }
-        ];
-        resolve(users);
-      }, 500); // Simulate 0.5 seconds delay
-    });
-  }
-
-  function showCRUDSection() {
-    loginForm.style.display = "none";
-    crudSection.style.display = "block";
-
-    // Simulate API call to fetch user details after login
-    simulateGetUserDetails()
-      .then((users) => {
-        displayUserDetails(users);
-      });
-  }
-
-  function displayUserDetails(users) {
-    userDetails.innerHTML = "";
-    users.forEach((user) => {
-      const userDiv = document.createElement("div");
-      userDiv.innerHTML = `<p><strong>ID:</strong> ${user.id}</p>
+    function displayUserDetails(users) {
+        userDetails.innerHTML = "";
+        users.forEach((user) => {
+            const userDiv = document.createElement("div");
+            userDiv.innerHTML = `<p><strong>ID:</strong> ${user.id}</p>
                            <p><strong>Username:</strong> ${user.username}</p>
                            <p><strong>Email:</strong> ${user.email}</p>`;
-      userDetails.appendChild(userDiv);
-  });
- }
+            userDetails.appendChild(userDiv);
+        });
+    }
 });
